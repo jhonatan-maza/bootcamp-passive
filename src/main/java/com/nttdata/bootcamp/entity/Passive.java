@@ -16,23 +16,23 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Document(collection = "customer")
+@Document(collection = "passive")
 public class Passive {
 
     @Id
     private String id;
 
     private String dni;
+    private String accountNumber;
 
-    private String name;
+    private Boolean saving;
+    private Boolean currentAccount;
+    private Boolean fixedTerm;
 
-    private String surName;
-
-    private String address;
+    private Number movementCommission;
+    private Number savingMovementsMonthly;
 
     private String status;
-
-    //private List<CustomerType> customerType;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @CreatedDate
