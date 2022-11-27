@@ -1,6 +1,6 @@
 spring:
   application:
-    name: bootcamp-customer
+    name: bootcamp-passive
   cloud:
     config:
       enabled: true
