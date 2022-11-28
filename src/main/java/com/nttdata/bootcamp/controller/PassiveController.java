@@ -98,4 +98,106 @@ public class PassiveController {
 
 	}
 
+	//Save Personal Customer By Passive -savings-account
+	@PostMapping(value = "/savePersonalCustomerByPassive-savings-account")
+	public Mono<Passive> savePersonalCustomerByPassiveSavingsAccount(@Valid @RequestBody Passive dataPassive){
+
+		Mono.just(dataPassive).doOnNext(t -> {
+
+					t.setTypeCustomer("PERSONAL");
+					t.setCreationDate(new Date());
+					t.setModificationDate(new Date());
+
+				}).onErrorReturn(dataPassive).onErrorResume(e -> Mono.just(dataPassive))
+				.onErrorMap(f -> new InterruptedException(f.getMessage())).subscribe(x -> LOGGER.info(x.toString()));
+
+		Mono<Passive> newCustomer = passiveService.savePersonalCustomerByPassive(dataPassive, "savings-account");
+		return newCustomer;
+	}
+
+	//Save Personal Customer By Passive -savings-account
+	@PostMapping(value = "/savePersonalCustomerByPassive-current-account")
+	public Mono<Passive> savePersonalCustomerByPassiveCurrentAccount(@Valid @RequestBody Passive dataPassive){
+
+		Mono.just(dataPassive).doOnNext(t -> {
+
+					t.setTypeCustomer("PERSONAL");
+					t.setCreationDate(new Date());
+					t.setModificationDate(new Date());
+
+				}).onErrorReturn(dataPassive).onErrorResume(e -> Mono.just(dataPassive))
+				.onErrorMap(f -> new InterruptedException(f.getMessage())).subscribe(x -> LOGGER.info(x.toString()));
+
+		Mono<Passive> newCustomer = passiveService.savePersonalCustomerByPassive(dataPassive, "current-account");
+		return newCustomer;
+	}
+
+	//Save Personal Customer By Passive -savings-account
+	@PostMapping(value = "/savePersonalCustomerByPassive-fixed-term")
+	public Mono<Passive> savePersonalCustomerByPassiveFixedTerm(@Valid @RequestBody Passive dataPassive){
+
+		Mono.just(dataPassive).doOnNext(t -> {
+
+					t.setTypeCustomer("PERSONAL");
+					t.setCreationDate(new Date());
+					t.setModificationDate(new Date());
+
+				}).onErrorReturn(dataPassive).onErrorResume(e -> Mono.just(dataPassive))
+				.onErrorMap(f -> new InterruptedException(f.getMessage())).subscribe(x -> LOGGER.info(x.toString()));
+
+		Mono<Passive> newCustomer = passiveService.savePersonalCustomerByPassive(dataPassive, "fixed-term");
+		return newCustomer;
+	}
+
+	//Save Business Customer By Passive -savings-account
+	@PostMapping(value = "/saveBusinessCustomerByPassive-savings-account")
+	public Mono<Passive> saveBusinessCustomerByPassiveSavingsAccount(@Valid @RequestBody Passive dataPassive){
+
+		Mono.just(dataPassive).doOnNext(t -> {
+
+					t.setTypeCustomer("EMPRESARIAL");
+					t.setCreationDate(new Date());
+					t.setModificationDate(new Date());
+
+				}).onErrorReturn(dataPassive).onErrorResume(e -> Mono.just(dataPassive))
+				.onErrorMap(f -> new InterruptedException(f.getMessage())).subscribe(x -> LOGGER.info(x.toString()));
+
+		Mono<Passive> newCustomer = passiveService.savePersonalCustomerByPassive(dataPassive, "savings-account");
+		return newCustomer;
+	}
+
+	//Save Business Customer By Passive -savings-account
+	@PostMapping(value = "/saveBusinessCustomerByPassive-current-account")
+	public Mono<Passive> saveBusinessCustomerByPassiveCurrentAccount(@Valid @RequestBody Passive dataPassive){
+
+		Mono.just(dataPassive).doOnNext(t -> {
+
+					t.setTypeCustomer("EMPRESARIAL");
+					t.setCreationDate(new Date());
+					t.setModificationDate(new Date());
+
+				}).onErrorReturn(dataPassive).onErrorResume(e -> Mono.just(dataPassive))
+				.onErrorMap(f -> new InterruptedException(f.getMessage())).subscribe(x -> LOGGER.info(x.toString()));
+
+		Mono<Passive> newCustomer = passiveService.savePersonalCustomerByPassive(dataPassive, "current-account");
+		return newCustomer;
+	}
+
+	//Save Business Customer By Passive -savings-account
+	@PostMapping(value = "/saveBusinessCustomerByPassive-fixed-term")
+	public Mono<Passive> saveBusinessCustomerByPassiveFixedTerm(@Valid @RequestBody Passive dataPassive){
+
+		Mono.just(dataPassive).doOnNext(t -> {
+
+					t.setTypeCustomer("EMPRESARIAL");
+					t.setCreationDate(new Date());
+					t.setModificationDate(new Date());
+
+				}).onErrorReturn(dataPassive).onErrorResume(e -> Mono.just(dataPassive))
+				.onErrorMap(f -> new InterruptedException(f.getMessage())).subscribe(x -> LOGGER.info(x.toString()));
+
+		Mono<Passive> newCustomer = passiveService.savePersonalCustomerByPassive(dataPassive, "fixed-term");
+		return newCustomer;
+	}
+
 }

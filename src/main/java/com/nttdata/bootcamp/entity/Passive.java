@@ -1,10 +1,7 @@
 package com.nttdata.bootcamp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,13 +21,14 @@ public class Passive {
 
     private String dni;
     private String accountNumber;
+    private String typeCustomer;
 
-    private Boolean saving;
-    private Boolean currentAccount;
-    private Boolean fixedTerm;
+    private Boolean saving = false;
+    private Boolean currentAccount = false;
+    private Boolean fixedTerm = false;
 
-    private Number movementCommission;
-    private Number savingMovementsMonthly;
+    private Number movementCommission; //Commission percentage
+    private Number savingMovementsMonthly; //Movement limit
 
     private String status;
     private Double balance;
