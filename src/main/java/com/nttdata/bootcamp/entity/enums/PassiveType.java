@@ -1,5 +1,5 @@
 package com.nttdata.bootcamp.entity.enums;
 
-public enum CustomerType {
+public enum PassiveType {
     PERSONAL, EMPRESARIAL
 }

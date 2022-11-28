@@ -8,9 +8,11 @@ import reactor.core.publisher.Mono;
 public interface PassiveService {
 
     public Flux<Passive> findAll();
-    public Mono<Passive> findByDni(String dni);
-    public Mono<Passive> save(Passive passive);
+    public Mono<Passive> findByAccountNumber(String accountNumber);
+
+    public Flux<Passive> findByCustomer(String dni);
+    public Mono<Passive> save(Passive active);
     public Mono<Passive> update(Passive dataPassive);
-    public Mono<Void> delete(String dni);
+    public Mono<Void> delete(String accountNumber);
 
 }

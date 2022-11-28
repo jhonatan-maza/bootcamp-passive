@@ -15,19 +15,25 @@ public class PassiveServiceImpl implements PassiveService {
 
     @Override
     public Flux<Passive> findAll() {
-        Flux<Passive> customers = passiveRepository.findAll();
-        return customers;
+        Flux<Passive> passives = passiveRepository.findAll();
+        return passives;
     }
 
     @Override
-    public Mono<Passive> findByDni(String dni) {
-        Mono<Passive> customer = passiveRepository
+    public Mono<Passive> findByAccountNumber(String accountNumber) {
+        Mono<Passive> passiveMono = passiveRepository
                 .findAll()
-                .filter(x -> x.getDni().equals(dni))
+                .filter(x -> x.getAccountNumber().equals(accountNumber))
                 .next();
-        return customer;
+        return passiveMono;
     }
-
+    @Override
+    public Flux<Passive> findByCustomer(String dni) {
+        Flux<Passive> passives = passiveRepository
+                .findAll()
+                .filter(x -> x.getDni().equals(dni));
+        return passives;
+    }
     @Override
     public Mono<Passive> save(Passive dataPassive) {
         return passiveRepository.save(dataPassive);
@@ -35,16 +41,16 @@ public class PassiveServiceImpl implements PassiveService {
 
     @Override
     public Mono<Passive> update(Passive dataPassive) {
-        Mono<Passive> customerMono = findByDni(dataPassive.getDni());
-        Passive passive = customerMono.block();
+        Mono<Passive> passiveMono = findByAccountNumber(dataPassive.getDni());
+        Passive passive = passiveMono.block();
         passive.setStatus(dataPassive.getStatus());
         return passiveRepository.save(passive);
     }
 
     @Override
     public Mono<Void> delete(String dni) {
-        Mono<Passive> customerMono = findByDni(dni);
-        Passive passive = customerMono.block();
+        Mono<Passive> passiveMono = findByAccountNumber(dni);
+        Passive passive = passiveMono.block();
         return passiveRepository.delete(passive);
     }
 

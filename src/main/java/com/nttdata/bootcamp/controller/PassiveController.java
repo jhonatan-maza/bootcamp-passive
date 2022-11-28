@@ -17,31 +17,39 @@ import java.util.Date;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/customer")
+@RequestMapping(value = "/passive")
 public class PassiveController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PassiveController.class);
 	@Autowired
 	private PassiveService passiveService;
 
-	//Customer search
+	//Passives search
 	@GetMapping("/")
-	public Flux<Passive> findAllCustomers() {
-		Flux<Passive> customers = passiveService.findAll();
-		LOGGER.info("Registered Customers: " + customers);
-		return customers;
+	public Flux<Passive> findAllPassives() {
+		Flux<Passive> actives = passiveService.findAll();
+		LOGGER.info("Registered Passives Products: " + actives);
+		return actives;
 	}
 
-	//Search for clients by DNI
-	@GetMapping("/findByClient/{dni}")
-	public Mono<Passive> findByClientDNI(@PathVariable("dni") String dni) {
-		LOGGER.info("Searching client by DNI: " + dni);
-		return passiveService.findByDni(dni);
+	//Passives search by customer
+	@GetMapping("/findAllPassivesByCustomer/{dni}")
+	public Flux<Passive> findAllPassivesByCustomer(@PathVariable("dni") String dni) {
+		Flux<Passive> passives = passiveService.findByCustomer(dni);
+		LOGGER.info("Registered Actives Products by customer of dni: "+dni +"-" + passives);
+		return passives;
 	}
 
-	//Save customer
+	//Search for passive by AccountNumber
+	@GetMapping("/findByAccountNumber/{accountNumber}")
+	public Mono<Passive> findByAccountNumber(@PathVariable("accountNumber") String accountNumber) {
+		LOGGER.info("Searching passives product by accountNumber: " + accountNumber);
+		return passiveService.findByAccountNumber(accountNumber);
+	}
+
+	//Save passive
 	@PostMapping(value = "/save")
-	public Mono<Passive> saveCustomer(@RequestBody Passive dataPassive){
+	public Mono<Passive> saveActive(@RequestBody Passive dataPassive){
 		Mono.just(dataPassive).doOnNext(t -> {
 
 					t.setCreationDate(new Date());
@@ -50,35 +58,44 @@ public class PassiveController {
 				}).onErrorReturn(dataPassive).onErrorResume(e -> Mono.just(dataPassive))
 				.onErrorMap(f -> new InterruptedException(f.getMessage())).subscribe(x -> LOGGER.info(x.toString()));
 
-		Mono<Passive> newCustomer = passiveService.save(dataPassive);
-		return newCustomer;
+		Mono<Passive> passiveMono = passiveService.save(dataPassive);
+		return passiveMono;
 	}
 
-	//Update customer
-	@PutMapping("/update/{dni}")
-	public ResponseEntity<Mono<?>> updateCustomer(@PathVariable("dni") String dni,
-													   @Valid @RequestBody Passive dataPassive) {
+	//Update passive
+	@PutMapping("/update/{accountNumber}")
+	public ResponseEntity<Mono<?>> updateActive(@PathVariable("accountNumber") String accountNumber,
+												@Valid @RequestBody Passive dataPassive) {
 		Mono.just(dataPassive).doOnNext(t -> {
-					dataPassive.setDni(dni);
+					dataPassive.setAccountNumber(accountNumber);
 					t.setModificationDate(new Date());
 
 				}).onErrorReturn(dataPassive).onErrorResume(e -> Mono.just(dataPassive))
 				.onErrorMap(f -> new InterruptedException(f.getMessage())).subscribe(x -> LOGGER.info(x.toString()));
 
-		Mono<Passive> pAsset = passiveService.update(dataPassive);
+		Mono<Passive> passiveMono = passiveService.update(dataPassive);
 
-		if (pAsset != null) {
-			return new ResponseEntity<>(pAsset, HttpStatus.CREATED);
+		if (passiveMono != null) {
+			return new ResponseEntity<>(passiveMono, HttpStatus.CREATED);
 		}
 		return new ResponseEntity<>(Mono.just(new Passive()), HttpStatus.I_AM_A_TEAPOT);
 	}
 
-	//Delete customer
-	@DeleteMapping("/delete/{dni}")
-	public ResponseEntity<Mono<Void>> deleteCustomer(@PathVariable("dni") String dni) {
-		LOGGER.info("Deleting client by DNI: " + dni);
-		Mono<Void> delete = passiveService.delete(dni);
+	//Delete passive
+	@DeleteMapping("/delete/{accountNumber}")
+	public ResponseEntity<Mono<Void>> deleteCustomer(@PathVariable("accountNumber") String accountNumber) {
+		LOGGER.info("Deleting passive product by accountNumber: " + accountNumber);
+		Mono<Void> delete = passiveService.delete(accountNumber);
 		return ResponseEntity.noContent().build();
+	}
+
+	//get balance of an Passive Product
+	@GetMapping("/balanceOfPassive/{accountNumber}")
+		public Double balanceOfPassive(@PathVariable("accountNumber") String accountNumber) {
+		//LOGGER.info("Balance of passiveAccount " + accountNumber +":");
+		Mono<Passive> pasiveProductMono= findByAccountNumber(accountNumber);
+			return pasiveProductMono.block().getBalance();
+
 	}
 
 }

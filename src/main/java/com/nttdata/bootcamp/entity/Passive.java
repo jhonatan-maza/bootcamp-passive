@@ -33,6 +33,7 @@ public class Passive {
     private Number savingMovementsMonthly;
 
     private String status;
+    private Double balance;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @CreatedDate
