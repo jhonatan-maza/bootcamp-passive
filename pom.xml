@@ -8,7 +8,7 @@
 		<version>2.7.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.nttdata</groupId>
+	<groupId>com.nttdata.bootcamp</groupId>
 	<artifactId>bootcamp-passive</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bootcamp-passive</name>
