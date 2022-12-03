@@ -1,7 +1,10 @@
 package com.nttdata.bootcamp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,19 +16,14 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Document(collection = "passive")
-public class Passive {
-
+@Document(collection = "fixedTerm")
+public class PassiveFixedTerm {
     @Id
     private String id;
 
     private String dni;
     private String accountNumber;
     private String typeCustomer;
-
-    private Boolean saving = false;
-    private Boolean currentAccount = false;
-    private Boolean fixedTerm = false;
 
     private Number movementCommission; //Commission percentage
     private Number savingMovementsMonthly; //Movement limit
@@ -40,5 +38,4 @@ public class Passive {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @LastModifiedDate
     private Date modificationDate;
-
 }
