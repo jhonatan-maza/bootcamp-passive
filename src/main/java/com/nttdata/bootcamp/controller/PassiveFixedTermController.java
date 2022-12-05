@@ -1,7 +1,9 @@
 package com.nttdata.bootcamp.controller;
 
+import com.nttdata.bootcamp.entity.PassiveCurrentAccount;
 import com.nttdata.bootcamp.entity.PassiveFixedTerm;
 import com.nttdata.bootcamp.service.PassiveFixedTermService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,7 @@ public class PassiveFixedTermController {
 	}
 
 	//Search for passive by AccountNumber
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetFixedTerm")
 	@GetMapping("/findBySavingAccountNumber/{accountNumber}")
 	public Mono<PassiveFixedTerm> findByFixedTermAccountNumber(@PathVariable("accountNumber") String accountNumber) {
 		LOGGER.info("Searching passives product by accountNumber: " + accountNumber);
@@ -46,6 +49,7 @@ public class PassiveFixedTermController {
 	}
 
 	//Save passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetFixedTerm")
 	@PostMapping(value = "/saveSaving")
 	public Mono<PassiveFixedTerm> saveFixedTerm(@RequestBody PassiveFixedTerm dataPassiveSaving){
 		Mono.just(dataPassiveSaving).doOnNext(t -> {
@@ -61,6 +65,7 @@ public class PassiveFixedTermController {
 	}
 
 	//Update passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetFixedTerm")
 	@PutMapping("/updateFixedTerm/{accountNumber}")
 	public ResponseEntity<Mono<?>> updateFixedTerm(@PathVariable("accountNumber") String accountNumber,
 												@Valid @RequestBody PassiveFixedTerm dataPassiveSaving) {
@@ -80,6 +85,7 @@ public class PassiveFixedTermController {
 	}
 
 	//Delete passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetFixedTerm")
 	@DeleteMapping("/deleteFixedTerm/{accountNumber}")
 	public ResponseEntity<Mono<Void>> deleteFixedTerm(@PathVariable("accountNumber") String accountNumber) {
 		LOGGER.info("Deleting passive product by accountNumber: " + accountNumber);
@@ -197,5 +203,11 @@ public class PassiveFixedTermController {
 		Mono<PassiveSaving> newCustomer = passiveSavingService.saveSavingPersonalCustomerByPassive(dataPassiveSaving);
 		return newCustomer;
 	}*/
+
+	private Mono<PassiveFixedTerm> fallBackGetCurrent(Exception e){
+		PassiveFixedTerm activeStaff= new PassiveFixedTerm();
+		Mono<PassiveFixedTerm> staffMono= Mono.just(activeStaff);
+		return staffMono;
+	}
 
 }

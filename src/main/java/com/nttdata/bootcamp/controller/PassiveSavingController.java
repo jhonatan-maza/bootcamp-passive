@@ -1,6 +1,8 @@
 package com.nttdata.bootcamp.controller;
 
+import com.nttdata.bootcamp.entity.PassiveFixedTerm;
 import com.nttdata.bootcamp.entity.PassiveSaving;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.nttdata.bootcamp.service.PassiveSavingService;
@@ -16,7 +18,7 @@ import java.util.Date;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/passive")
+@RequestMapping(value = "/saving")
 public class PassiveSavingController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PassiveSavingController.class);
@@ -40,6 +42,7 @@ public class PassiveSavingController {
 	}
 
 	//Search for passive by AccountNumber
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetSaving")
 	@GetMapping("/findBySavingAccountNumber/{accountNumber}")
 	public Mono<PassiveSaving> findBySavingAccountNumber(@PathVariable("accountNumber") String accountNumber) {
 		LOGGER.info("Searching passives product by accountNumber: " + accountNumber);
@@ -47,6 +50,7 @@ public class PassiveSavingController {
 	}
 
 	//Save passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetSaving")
 	@PostMapping(value = "/saveSaving")
 	public Mono<PassiveSaving> saveSaving(@RequestBody PassiveSaving dataPassiveSaving){
 		Mono.just(dataPassiveSaving).doOnNext(t -> {
@@ -62,6 +66,7 @@ public class PassiveSavingController {
 	}
 
 	//Update passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetSaving")
 	@PutMapping("/updateSaving/{accountNumber}")
 	public ResponseEntity<Mono<?>> updateSaving(@PathVariable("accountNumber") String accountNumber,
 												@Valid @RequestBody PassiveSaving dataPassiveSaving) {
@@ -81,6 +86,7 @@ public class PassiveSavingController {
 	}
 
 	//Delete passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetSaving")
 	@DeleteMapping("/deleteSaving/{accountNumber}")
 	public ResponseEntity<Mono<Void>> deleteSaving(@PathVariable("accountNumber") String accountNumber) {
 		LOGGER.info("Deleting passive product by accountNumber: " + accountNumber);
@@ -198,5 +204,9 @@ public class PassiveSavingController {
 		Mono<PassiveSaving> newCustomer = passiveSavingService.saveSavingPersonalCustomerByPassive(dataPassiveSaving);
 		return newCustomer;
 	}*/
-
+	private Mono<PassiveSaving> fallBackGetCurrent(Exception e){
+		PassiveSaving activeStaff= new PassiveSaving();
+		Mono<PassiveSaving> staffMono= Mono.just(activeStaff);
+		return staffMono;
+	}
 }

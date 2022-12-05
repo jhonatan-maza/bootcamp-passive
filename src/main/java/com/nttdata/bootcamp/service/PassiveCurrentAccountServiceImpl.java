@@ -1,6 +1,7 @@
 package com.nttdata.bootcamp.service;
 
 import com.nttdata.bootcamp.entity.PassiveCurrentAccount;
+import com.nttdata.bootcamp.repository.PassiveCurrentAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -10,32 +11,32 @@ import reactor.core.publisher.Mono;
 @Service
 public class PassiveCurrentAccountServiceImpl implements PassiveCurrentAccountService {
     @Autowired
-    private PassiveCurrentAccountService passiveCurrentAccountService;
+    private PassiveCurrentAccountRepository passiveCurrentAccountRepository;
 
     @Override
     public Flux<PassiveCurrentAccount> findAllCurrentAccount() {
-        Flux<PassiveCurrentAccount> passives = passiveCurrentAccountService.findAllCurrentAccount();
+        Flux<PassiveCurrentAccount> passives = passiveCurrentAccountRepository.findAll();
         return passives;
     }
 
     @Override
     public Mono<PassiveCurrentAccount> findCurrentAccountByAccountNumber(String accountNumber) {
-        Mono<PassiveCurrentAccount> passiveMono = passiveCurrentAccountService
-                .findAllCurrentAccount()
+        Mono<PassiveCurrentAccount> passiveMono = passiveCurrentAccountRepository
+                .findAll()
                 .filter(x -> x.getAccountNumber().equals(accountNumber))
                 .next();
         return passiveMono;
     }
     @Override
     public Flux<PassiveCurrentAccount> findCurrentAccountByCustomer(String dni) {
-        Flux<PassiveCurrentAccount> passives = passiveCurrentAccountService
-                .findAllCurrentAccount()
+        Flux<PassiveCurrentAccount> passives = passiveCurrentAccountRepository
+                .findAll()
                 .filter(x -> x.getDni().equals(dni));
         return passives;
     }
     @Override
     public Mono<PassiveCurrentAccount> saveCurrentAccount(PassiveCurrentAccount dataPassiveSaving) {
-        return passiveCurrentAccountService.saveCurrentAccount(dataPassiveSaving);
+        return passiveCurrentAccountRepository.save(dataPassiveSaving);
     }
 
     @Override
@@ -43,14 +44,14 @@ public class PassiveCurrentAccountServiceImpl implements PassiveCurrentAccountSe
         Mono<PassiveCurrentAccount> passiveMono = findCurrentAccountByAccountNumber(dataPassiveCurrentAccount.getDni());
         PassiveCurrentAccount currentAccount = passiveMono.block();
         currentAccount.setStatus (dataPassiveCurrentAccount.getStatus());
-        return passiveCurrentAccountService.saveCurrentAccount(currentAccount);
+        return passiveCurrentAccountRepository.save(currentAccount);
     }
 
     @Override
     public Mono<Void> deleteCurrentAccount(String accountNumber) {
         Mono<PassiveCurrentAccount> passiveMono = findCurrentAccountByAccountNumber(accountNumber);
         PassiveCurrentAccount passiveSaving = passiveMono.block();
-        return passiveCurrentAccountService.deleteCurrentAccount(passiveSaving.getAccountNumber());
+        return passiveCurrentAccountRepository.delete(passiveSaving);
     }
 
     @Override
@@ -84,20 +85,20 @@ public class PassiveCurrentAccountServiceImpl implements PassiveCurrentAccountSe
 
         return passive
                 .flatMap(__ -> Mono.<PassiveCurrentAccount>error(new Error("El cliente con dni " + dataPassiveSaving.getDni() + " YA TIENE UNA CUENTA")))
-                .switchIfEmpty(passiveCurrentAccountService.saveCurrentAccount(dataPassiveSaving));
+                .switchIfEmpty(passiveCurrentAccountRepository.save(dataPassiveSaving));
     }
 
     public Mono<PassiveCurrentAccount> searchBySavingPersonalCustomer(PassiveCurrentAccount dataPassiveSaving){
-        Mono<PassiveCurrentAccount> savingsAccount = passiveCurrentAccountService
-                .findAllCurrentAccount()
+        Mono<PassiveCurrentAccount> savingsAccount = passiveCurrentAccountRepository
+                .findAll()
                 .filter(x -> x.getDni().equals(dataPassiveSaving.getDni()) && x.getTypeCustomer().equals(dataPassiveSaving.getTypeCustomer()) )
                 .next();
         return savingsAccount;
     }
 
     public Mono<PassiveCurrentAccount> searchBySavingBusinessCustomer(PassiveCurrentAccount dataPassiveSaving){
-        Mono<PassiveCurrentAccount> savingsAccount = passiveCurrentAccountService
-                .findAllCurrentAccount()
+        Mono<PassiveCurrentAccount> savingsAccount = passiveCurrentAccountRepository
+                .findAll()
                 .filter(x -> x.getDni().equals(dataPassiveSaving.getDni()) && x.getTypeCustomer().equals(dataPassiveSaving.getTypeCustomer()) )
                 .next();
         return savingsAccount;

@@ -4,6 +4,7 @@ import com.nttdata.bootcamp.entity.PassiveCurrentAccount;
 import com.nttdata.bootcamp.entity.PassiveSaving;
 import com.nttdata.bootcamp.service.PassiveCurrentAccountService;
 import com.nttdata.bootcamp.service.PassiveSavingService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ public class PassiveCurrentAccountController {
 	}
 
 	//Search for passive by AccountNumber
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetCurrent")
 	@GetMapping("/findBySavingAccountNumber/{accountNumber}")
 	public Mono<PassiveCurrentAccount> findByCurrentAccountNumber(@PathVariable("accountNumber") String accountNumber) {
 		LOGGER.info("Searching passives product by accountNumber: " + accountNumber);
@@ -48,6 +50,7 @@ public class PassiveCurrentAccountController {
 	}
 
 	//Save passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetCurrent")
 	@PostMapping(value = "/saveSaving")
 	public Mono<PassiveCurrentAccount> saveSaving(@RequestBody PassiveCurrentAccount dataPassiveSaving){
 		Mono.just(dataPassiveSaving).doOnNext(t -> {
@@ -63,6 +66,7 @@ public class PassiveCurrentAccountController {
 	}
 
 	//Update passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetCurrent")
 	@PutMapping("/updateSaving/{accountNumber}")
 	public ResponseEntity<Mono<?>> updateSaving(@PathVariable("accountNumber") String accountNumber,
 												@Valid @RequestBody PassiveCurrentAccount dataPassiveSaving) {
@@ -82,6 +86,7 @@ public class PassiveCurrentAccountController {
 	}
 
 	//Delete passive
+	@CircuitBreaker(name = "passive", fallbackMethod = "fallBackGetCurrent")
 	@DeleteMapping("/deleteSaving/{accountNumber}")
 	public ResponseEntity<Mono<Void>> deleteSaving(@PathVariable("accountNumber") String accountNumber) {
 		LOGGER.info("Deleting passive product by accountNumber: " + accountNumber);
@@ -131,6 +136,11 @@ public class PassiveCurrentAccountController {
 
 		Mono<PassiveCurrentAccount> newCurrent = passiveCurrentAccountService.saveCurrentAccountPersonalCustomerByPassive(dataPassiveSaving);
 		return newCurrent;
+	}
+	private Mono<PassiveCurrentAccount> fallBackGetCurrent(Exception e){
+		PassiveCurrentAccount activeStaff= new PassiveCurrentAccount();
+		Mono<PassiveCurrentAccount> staffMono= Mono.just(activeStaff);
+		return staffMono;
 	}
 
 
