@@ -3,7 +3,6 @@ package com.nttdata.bootcamp.controller;
 import com.nttdata.bootcamp.entity.PassiveCurrentAccount;
 import com.nttdata.bootcamp.entity.PassiveSaving;
 import com.nttdata.bootcamp.service.PassiveCurrentAccountService;
-import com.nttdata.bootcamp.service.PassiveSavingService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import javax.validation.Valid;
 import java.util.Date;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/currentAccount")
 public class PassiveCurrentAccountController {

@@ -1,6 +1,5 @@
 package com.nttdata.bootcamp.controller;
 
-import com.nttdata.bootcamp.entity.PassiveCurrentAccount;
 import com.nttdata.bootcamp.entity.PassiveFixedTerm;
 import com.nttdata.bootcamp.service.PassiveFixedTermService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -12,10 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import javax.validation.Valid;
 import java.util.Date;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/fixedTerm")
 public class PassiveFixedTermController {
