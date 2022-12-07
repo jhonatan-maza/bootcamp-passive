@@ -16,20 +16,25 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Document(collection = "fixedTerm")
-public class PassiveFixedTerm {
+@Document(collection = "passive")
+public class Passive {
     @Id
     private String id;
 
     private String dni;
-    private String accountNumber;
     private String typeCustomer;
+    private String accountNumber;
 
-    private Number movementCommission; //Commission percentage
-    private Number savingMovementsMonthly; //Movement limit
+    private Boolean saving;
+    private Boolean currentAccount;
+    private Boolean fixedTerm;
+
+    private Boolean freeCommission;
+    private Number commissionMaintenance;
+    private Boolean movementsMonthly;
+    private Number limitMovementsMonthly;
 
     private String status;
-    private Double balance;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @CreatedDate

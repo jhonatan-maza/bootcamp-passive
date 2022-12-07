@@ -1,11 +1,12 @@
 package com.nttdata.bootcamp.util;
 
 public class Constant {
+    public static final String PASSIVE_ACTIVE = "ACTIVE";
+    public static final String PASSIVE_INACTIVE = "INACTIVE";
+    public static final String PERSONAL_CUSTOMER = "PERSONAL";
+    public static final String BUSINESS_CUSTOMER = "EMPRESARIAL";
     public static final String QUERY_FAILED = "Error en la consulta";
     public static final String NO_RECORDS = "No existen registros";
-    public static final String PASSIVE_NOT_EXIST = "ProductoPasivo no existe";
-    public static final String PASSIVE_EXIST = "ProductoPasivo ya existe";
-    public static final String SAVINGS_ACCOUNT = "savings-account";
-    public static final String CURRENT_ACCOUNT = "current-account";
-    public static final String FIXED_TERM = "fixed-term";
+    public static final String SAVING_ACCOUNT_NOT_EXIST = "Cuenta de ahorro no existe";
+    public static final String SAVING_ACCOUNT_EXIST = "Cuenta de ahorro ya existe";
 }
