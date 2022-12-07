@@ -1,7 +1,9 @@
-package com.nttdata.bootcamp.service;
+package com.nttdata.bootcamp.service.impl;
 
 import com.nttdata.bootcamp.entity.Passive;
 import com.nttdata.bootcamp.repository.PassiveRepository;
+import com.nttdata.bootcamp.service.CurrentAccountService;
+import com.nttdata.bootcamp.service.PassiveService;
 import com.nttdata.bootcamp.util.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

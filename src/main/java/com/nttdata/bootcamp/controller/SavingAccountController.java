@@ -4,6 +4,7 @@ import com.nttdata.bootcamp.entity.Passive;
 import com.nttdata.bootcamp.entity.dto.SavingAccountDto;
 import com.nttdata.bootcamp.entity.dto.UpdateSavingAccountDto;
 import com.nttdata.bootcamp.util.Constant;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.nttdata.bootcamp.service.SavingAccountService;
